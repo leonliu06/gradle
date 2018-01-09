@@ -27,6 +27,7 @@ import org.gradle.initialization.DefaultContinuousExecutionGate;
 import org.gradle.internal.Cast;
 import org.gradle.internal.concurrent.CompositeStoppable;
 import org.gradle.internal.concurrent.Stoppable;
+import org.gradle.internal.filewatch.FileWatcherEvent;
 import org.gradle.internal.filewatch.PendingChangesListener;
 import org.gradle.internal.filewatch.PendingChangesManager;
 import org.gradle.internal.operations.BuildOperationContext;
@@ -129,12 +130,12 @@ public class DefaultDeploymentRegistry implements DeploymentRegistryInternal, Pe
     }
 
     @Override
-    public void onPendingChanges() {
+    public void onPendingChanges(FileWatcherEvent fileWatcherEvent) {
         lock.lock();
         try {
             pendingChanges.changesMade();
             for (RegisteredDeployment deployment : deployments.values()) {
-                deployment.outOfDate();
+                deployment.outOfDate(fileWatcherEvent);
             }
         } finally {
             lock.unlock();

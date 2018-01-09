@@ -17,6 +17,7 @@
 package org.gradle.deployment.internal
 
 import org.gradle.api.model.ObjectFactory
+import org.gradle.internal.filewatch.FileWatcherEvent
 import org.gradle.internal.filewatch.PendingChangesManager
 import org.gradle.internal.operations.TestBuildOperationExecutor
 import spock.lang.Specification
@@ -38,6 +39,11 @@ class DefaultDeploymentRegistryTest extends Specification {
         @Override
         void stop() {
             running = false
+        }
+
+        @Override
+        boolean outOfDate(FileWatcherEvent fileWatcherEvent) {
+            return true
         }
     }
 

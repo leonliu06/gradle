@@ -18,8 +18,10 @@ package org.gradle.play.internal.run;
 
 import org.gradle.deployment.internal.Deployment;
 import org.gradle.deployment.internal.DeploymentHandle;
+import org.gradle.internal.filewatch.FileWatcherEvent;
 
 import javax.inject.Inject;
+import java.io.File;
 import java.net.InetSocketAddress;
 
 public class PlayApplicationDeploymentHandle implements DeploymentHandle {
@@ -53,5 +55,14 @@ public class PlayApplicationDeploymentHandle implements DeploymentHandle {
     @Override
     public void stop() {
         playApplication.stop();
+    }
+
+    @Override
+    public boolean outOfDate(FileWatcherEvent fileWatcherEvent) {
+        File changedFile = fileWatcherEvent.getFile();
+        if (changedFile == null) {
+            return true;
+        }
+        return !changedFile.getAbsolutePath().contains("public");
     }
 }

@@ -17,5 +17,5 @@
 package org.gradle.internal.filewatch;
 
 public interface PendingChangesListener {
-    void onPendingChanges();
+    void onPendingChanges(FileWatcherEvent fileWatcherEvent);
 }

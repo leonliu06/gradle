@@ -86,14 +86,14 @@ class DefaultFileSystemChangeWaiter implements FileSystemChangeWaiter {
             onError,
             new FileWatcherListener() {
                 @Override
-                public void onChange(final FileWatcher watcher, FileWatcherEvent event) {
+                public void onChange(final FileWatcher watcher, final FileWatcherEvent event) {
                     if (!(event.getType() == FileWatcherEvent.Type.MODIFY && event.getFile().isDirectory())) {
                         deliverEvent(event);
                         signal(lock, condition, new Runnable() {
                             @Override
                             public void run() {
                                 lastChangeAt.set(monotonicClockMillis());
-                                pendingChangesListener.onPendingChanges();
+                                pendingChangesListener.onPendingChanges(event);
                             }
                         });
                     }

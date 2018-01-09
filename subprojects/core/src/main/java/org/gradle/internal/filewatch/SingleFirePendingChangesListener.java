@@ -30,11 +30,11 @@ public class SingleFirePendingChangesListener implements PendingChangesListener 
     }
 
     @Override
-    public void onPendingChanges() {
+    public void onPendingChanges(FileWatcherEvent fileWatcherEvent) {
         // Only fire once
         if (!seenChanges) {
             LOGGER.debug("notifying pending changes");
-            delegate.onPendingChanges();
+            delegate.onPendingChanges(fileWatcherEvent);
             seenChanges = true;
         } else {
             LOGGER.debug("already notified");

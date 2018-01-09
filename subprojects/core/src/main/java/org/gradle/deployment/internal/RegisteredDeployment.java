@@ -18,6 +18,7 @@ package org.gradle.deployment.internal;
 
 import org.gradle.initialization.ContinuousExecutionGate;
 import org.gradle.internal.concurrent.Stoppable;
+import org.gradle.internal.filewatch.FileWatcherEvent;
 
 class RegisteredDeployment implements Stoppable {
     private final String id;
@@ -33,7 +34,7 @@ class RegisteredDeployment implements Stoppable {
     }
 
     static RegisteredDeployment create(String id, DeploymentRegistry.ChangeBehavior changeBehavior, ContinuousExecutionGate continuousExecutionGate, DeploymentHandle deploymentHandle) {
-        switch(changeBehavior) {
+        switch (changeBehavior) {
             case NONE:
                 return new RegisteredDeployment(id, false, deploymentHandle, new OutOfDateTrackingDeployment());
             case RESTART:
@@ -51,6 +52,12 @@ class RegisteredDeployment implements Stoppable {
 
     public void outOfDate() {
         delegate.outOfDate();
+    }
+
+    public void outOfDate(FileWatcherEvent fileWatcherEvent) {
+        if (handle.outOfDate(fileWatcherEvent)) {
+            outOfDate();
+        }
     }
 
     public void upToDate(Throwable failure) {

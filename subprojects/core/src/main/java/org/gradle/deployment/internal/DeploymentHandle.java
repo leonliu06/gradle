@@ -17,6 +17,7 @@
 package org.gradle.deployment.internal;
 
 import org.gradle.api.Incubating;
+import org.gradle.internal.filewatch.FileWatcherEvent;
 
 import javax.inject.Inject;
 
@@ -45,4 +46,6 @@ public interface DeploymentHandle {
      * Stops the deployment.
      */
     void stop();
+
+    boolean outOfDate(FileWatcherEvent fileWatcherEvent);
 }

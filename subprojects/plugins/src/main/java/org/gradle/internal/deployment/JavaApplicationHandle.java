@@ -18,6 +18,7 @@ package org.gradle.internal.deployment;
 
 import org.gradle.deployment.internal.Deployment;
 import org.gradle.deployment.internal.DeploymentHandle;
+import org.gradle.internal.filewatch.FileWatcherEvent;
 import org.gradle.process.internal.ExecHandle;
 import org.gradle.process.internal.ExecHandleState;
 import org.gradle.process.internal.JavaExecHandleBuilder;
@@ -46,5 +47,10 @@ public class JavaApplicationHandle implements DeploymentHandle {
     @Override
     public void stop() {
         handle.abort();
+    }
+
+    @Override
+    public boolean outOfDate(FileWatcherEvent fileWatcherEvent) {
+        return true;
     }
 }
